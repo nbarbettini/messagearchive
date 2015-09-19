@@ -138,6 +138,8 @@ publish/
 ## passwords
 #*.pubxml
 
+PublishScripts/
+
 *.publishproj
 
 # NuGet Packages
