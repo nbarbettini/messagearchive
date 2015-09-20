@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Message Archive Demo</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="Content/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="Content/page-narrow.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="Scripts/jquery-2.1.4.min.js"></script>
+        <script src="Scripts/angular.js"></script>
+        <script src="Scripts/ng-infinite-scroll.js"></script>
+        <script src="Scripts/moment.min.js"></script>
+        <script src="demo.js"></script>
+    </head>
+
+    <body ng-app="archiveApp">
+        <div class="container" ng-controller="DemoController">
+            <div class="header clearfix">
+                <nav>
+                    <ul class="nav nav-pills pull-right">
+                        <li role="presentation" class="active"><a href="#">Home</a></li>
+                    </ul>
+                </nav>
+                <h3 class="text-muted">Message Archive</h3>
+            </div>
+
+            <div class="row">
+                <form>
+                    <div class="form-group">
+                        <input type="search" 
+                               class="form-control"
+                               placeholder="Search messages..."
+                               ng-model="query"
+                               ng-model-options="{ debounce: 100 }" />
+                    </div>
+                </form>
+            </div>
+
+            <div class="row" ng-show="!archive || archive.items.length === 0">
+                <p class="lead text-muted">Nothing to show yet. Search for something!</p>
+            </div>
+
+            <div ng-show="archive.items.length !== 0"
+                 infinite-scroll='archive.more()' 
+                 infinite-scroll-disabled='archive.busy' 
+                 infinite-scroll-distance='1'>
+                <div class="row" ng-repeat='message in archive.items'>
+                    <div class="col-sm-8" ng-class="{ 'col-sm-offset-4' : message.From === 'Me' }">
+                        <div class="panel" ng-class="message.From === 'Me' ? 'panel-info' : 'panel-default'">
+                            <div class="panel-heading">
+                                <strong>{{message.From === 'Me' ? message.To : message.From}}</strong>
+                                <span class="text-muted">{{message.Date.format("dddd, MMMM Do YYYY, h:mm:ss a");}}</span>
+                            </div>
+                            <div class="panel-body">
+                                {{message.Text}}
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div style='clear: both;'></div>-->
+                </div>
+
+                <div ng-show="archive.busy"
+                     class="alert alert-info"
+                     role="alert">Loading data...</div>
+                <div ng-show="archive.error"
+                     class="alert alert-danger"
+                     role="alert">Could not load items.</div>
+
+                <div class="row" ng-show="archive.atEnd">
+                    <p class="lead text-muted text-center">That's all!</p>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <p>&copy; 2015 Nathanael Barbettini</p>
+            </footer>
+
+        </div> <!-- /container -->
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <!--<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>-->
+    </body>
+</html>
