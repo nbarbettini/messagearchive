@@ -32,11 +32,14 @@ namespace MessageArchive.Controllers
                 .AllTypes()
                 .Size(size)
                 .From(from)
-                .SortAscending(x => x.Date)
+                .SortAscending(f => f.Date)
                 .Query(qry =>
                     (qry.Term("from", personTerm) ||
                     qry.Term("to", personTerm)) &&
-                    qry.MatchPhrase(mp => mp.OnField(f => f.Text).Query(textTerms))));
+                    qry.Match(m => m
+                        .OnField(f => f.Text)
+                        .Query(textTerms)
+                        .Operator(Operator.And))));
 
             return searchResults.Documents;
         }
