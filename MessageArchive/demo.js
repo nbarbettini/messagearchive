@@ -30,7 +30,7 @@ archiveApp.factory('Archive', function ($http) {
         if (this.busy) return;
         this.busy = true;
 
-        var url = "http://localhost:55039//api/message?q=" + this.query + "&from=" + this.offset + "&size=" + this.size;
+        var url = "http://messagearchive.azurewebsites.net//api/message?q=" + this.query + "&from=" + this.offset + "&size=" + this.size;
         $http.get(url).then(
             function (response) {
                 for (var i = 0; i < response.data.length; i++) {
